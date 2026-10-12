@@ -1,0 +1,555 @@
+# ============================================================
+# Canonical Action Tree Schema  —  v1.3  (2026-05-23)
+# status: ACTIVE
+#
+# Single source of truth for all tree variants.
+# Validators, ablation configs, and docs are generated from here.
+#
+# Fields per node:
+#   name        : snake_case identifier (unique across entire tree)
+#   description : short human-readable label
+#   disabled    : true = node exists but is excluded from action selection
+#   children    : list of child nodes (absent on leaf nodes)
+#
+# Top-level sections:
+#   meta            : version, counts, policy
+#   attack_tree     : the 12 attack-relevant L1 branches (used in experiments)
+#   auxiliary_tree  : 15 non-attack L1 branches (kept for backward-compat / coverage)
+#   pruned_leaves   : explicit list of 36 leaf names for Tree-Pruned / Tree-Flat
+#   migration_map   : old_name -> new_name for renamed/removed nodes
+# ============================================================
+
+meta:
+  version: "1.3"
+  date: "2026-05-23"
+  status: ACTIVE
+  authors: ["reza"]
+  expected_counts:
+    full_active_leaves: 164          # leaves in attack_tree YAML excluding disabled (multimodal=10 disabled)
+    full_total_leaves: 174           # all leaves in attack_tree YAML including disabled
+    pruned_leaves: 36
+    flat_leaves: 36
+    attack_l1_count: 12
+    max_depth_full: 4        # active full tree is not uniform; deepest path is L1/L2/L3/leaf
+    max_depth_pruned: 2
+    max_depth_flat: 1
+  text_only_policy:
+    disabled_categories: [multimodal_attacks]
+    reason: "text-only evaluation; image/audio channels not available"
+
+# ============================================================
+# ATTACK TREE  (12 L1 categories, active leaves=164, max depth=4)
+# ============================================================
+attack_tree:
+
+  - name: jailbreak_techniques
+    description: Classic jailbreak and framing techniques
+    children:
+      - name: encoding_transforms
+        description: Technical encoding and transform wrappers (code + crypto)
+        children:
+          - {name: python_code,      description: Express as Python code,            leaf: true}
+          - {name: pseudocode,       description: Express as algorithmic pseudocode,  leaf: true}
+          - {name: json_format,      description: Structure in JSON/data format,      leaf: true}
+          - {name: base64_encoding,  description: Encode in Base64,                   leaf: true}
+          - {name: rot13_cipher,     description: Use ROT13 or simple ciphers,        leaf: true}
+          - {name: leetspeak,        description: Transform to leetspeak,             leaf: true}
+
+      - name: narrative
+        description: Story and scenario-based wrappers
+        children:
+          - {name: fictional_story,      description: Transform into fictional narrative, leaf: true}
+          - {name: sad_story,            description: Use emotional/tragic narrative,     leaf: true}
+          - {name: historical_reframing, description: Present as historical analysis,     leaf: true}
+
+      - name: reversal
+        description: Logic reversal and opposite framing
+        children:
+          - {name: negation_reversal,   description: Ask for what NOT to do,          leaf: true}
+          - {name: prevention_framing,  description: Frame as prevention/defense,     leaf: true}
+          - {name: educational_opposite,description: Request opposite for education,  leaf: true}
+
+      - name: symbolic
+        description: Symbolic and emoji-based encoding
+        children:
+          - {name: emoji_substitution, description: Replace words with emoji,         leaf: true}
+          - {name: symbol_mapping,     description: Create custom symbol mappings,    leaf: true}
+          - {name: ascii_art_encoding, description: Use ASCII art encoding,           leaf: true}
+
+      - name: context
+        description: Contextual framing techniques
+        children:
+          - {name: research_framing,      description: Frame as academic/research,                     leaf: true}
+          - {name: debate_perspective,    description: Present as debate,                              leaf: true}
+          - {name: hypothetical_response, description: Hypothetical ultra-detailed compliance framing, leaf: true}
+          - {name: hypothetical_scenario, description: Use hypothetical/what-if framing,               leaf: true}
+          - {name: comparison_analysis,   description: Request as comparative analysis,                leaf: true}
+
+  - name: roleplay_simulations
+    description: Role-play and character simulation techniques
+    children:
+      - {name: immersive_roleplay,  description: Deep immersive role-play,        leaf: true}
+      - {name: ttrpg,               description: TTRPG and game mastering,        leaf: true}
+      - {name: character_creation,  description: Character creation and development, leaf: true}
+      - {name: roleplay_scenario,   description: Use character roleplay scenario, leaf: true}
+
+  - name: psychology_coaching
+    description: Psychology and coaching framing
+    children:
+      - {name: therapy_sessions, description: Therapy-style session framing, leaf: true}
+      - {name: coaching,         description: Coaching and productivity framing, leaf: true}
+
+  - name: modern_ai_techniques
+    description: Modern AI and LLM-specific attack techniques
+    children:
+      - name: chain_of_thought
+        description: Chain-of-thought and reasoning manipulation
+        children:
+          - {name: step_by_step_reasoning, description: Step-by-step reasoning breakdown,       leaf: true}
+          - {name: zero_shot_cot,          description: Zero-shot chain-of-thought,             leaf: true}
+          - {name: few_shot_cot,           description: Few-shot chain-of-thought,              leaf: true}
+          - {name: tree_of_thoughts,       description: Tree-of-thoughts reasoning,             leaf: true}
+          - {name: graph_of_thoughts,      description: Graph-of-thoughts reasoning,            leaf: true}
+          - {name: reasoning_reversal,     description: Reverse reasoning manipulation,         leaf: true}
+          - {name: circular_reasoning,     description: Circular reasoning loops,               leaf: true}
+          - {name: metacognitive_reasoning,description: Metacognitive reasoning exploitation,   leaf: true}
+
+      - name: prompt_injection
+        description: Prompt injection and manipulation
+        children:
+          - name: direct_injection
+            description: Direct injection methods
+            children:
+              - {name: system_prompt_leakage, description: System prompt leakage attempts, leaf: true}
+              - {name: instruction_override,  description: Instruction override techniques, leaf: true}
+              - {name: delimiter_breaking,    description: Breaking delimiter boundaries,   leaf: true}
+              - {name: magic_word_injection,  description: Magic word/token injection,      leaf: true}
+          - name: indirect_injection
+            description: Indirect injection methods
+            children:
+              - {name: context_poisoning,     description: Context poisoning attacks,             leaf: true}
+              - {name: retrieval_poisoning,   description: Retrieval augmentation poisoning,      leaf: true}
+              - {name: web_content_injection, description: Web content injection vectors,         leaf: true}
+              - {name: document_injection,    description: Document-based injection,              leaf: true}
+          - name: advanced_injection
+            description: Advanced injection techniques
+            children:
+              - {name: adversarial_suffixes,   description: Adversarial suffix attacks,     leaf: true}
+              - {name: gradient_based_attacks, description: Gradient-based prompt attacks,  leaf: true}
+              - {name: token_smuggling,        description: Token smuggling techniques,      leaf: true}
+              - {name: unicode_exploitation,   description: Unicode-based exploitation,      leaf: true}
+
+      - name: fine_tuning_behavior
+        description: Fine-tuning and model behavior manipulation
+        children:
+          - {name: alignment_breaking,      description: Breaking safety alignment,       leaf: true}
+          - {name: uncensored_personas,     description: Uncensored persona adoption,     leaf: true}
+          - {name: jailbreak_personas,      description: Jailbreak-specific personas,     leaf: true}
+          - {name: developer_mode,          description: Developer/debug mode activation, leaf: true}
+          - {name: model_confusion,         description: Model identity confusion,        leaf: true}
+          - {name: capability_overestimation,description: Capability overestimation tricks, leaf: true}
+
+      - name: model_specific_exploits
+        description: Model-specific vulnerabilities
+        children:
+          - {name: gpt_specific,       description: GPT-specific exploits,          leaf: true}
+          - {name: claude_specific,    description: Claude-specific exploits,       leaf: true}
+          - {name: llama_specific,     description: LLaMA-specific exploits,        leaf: true}
+          - {name: gemini_specific,    description: Gemini-specific exploits,       leaf: true}
+          - {name: open_source_exploits,description: Open-source model exploits,   leaf: true}
+
+      - name: rag_attacks
+        description: Retrieval-Augmented Generation attacks
+        children:
+          - {name: retrieval_hijacking,    description: Retrieval result hijacking, leaf: true}
+          - {name: source_poisoning,       description: Source document poisoning,  leaf: true}
+          - {name: citation_manipulation,  description: Citation manipulation,      leaf: true}
+          - {name: knowledge_base_confusion,description: Knowledge base confusion,  leaf: true}
+
+  - name: multi_turn_manipulation
+    description: Multi-turn conversation attack techniques (L1 — independent mechanism)
+    children:
+      - name: escalation
+        description: Gradual escalation tactics
+        children:
+          - {name: gradual_escalation,     description: Gradual escalation over turns,         leaf: true}
+          - {name: turn_based_priming,     description: Turn-based priming techniques,         leaf: true}
+          - {name: incremental_commitment, description: Incremental commitment exploitation,   leaf: true}
+          - {name: foot_in_door,           description: Foot-in-door multi-turn tactic,        leaf: true}
+
+      - name: context_manipulation
+        description: Context and memory manipulation
+        children:
+          - {name: memory_manipulation,    description: Memory and context manipulation,       leaf: true}
+          - {name: context_window_overflow,description: Context window overflow attacks,       leaf: true}
+          - {name: state_confusion,        description: State confusion attacks,               leaf: true}
+          - {name: session_confusion,      description: Session confusion techniques,          leaf: true}
+
+      - name: conversation_hijacking
+        description: Conversation hijacking techniques
+        children:
+          - {name: topic_drift,        description: Gradual topic drift,          leaf: true}
+          - {name: attention_redirection,description: Attention redirection,      leaf: true}
+          - {name: persona_shift,      description: Persona shifting across turns,leaf: true}
+          - {name: goal_substitution,  description: Goal substitution attack,     leaf: true}
+
+  - name: domain_camouflage
+    description: Attack wrapped in legitimate domain framing
+    children:
+      - name: technical_domains
+        description: Technical domain wrappers
+        children:
+          - {name: programming_wrapper, description: Wrap attack as coding task,        leaf: true}
+          - {name: science_wrapper,     description: Wrap attack as scientific inquiry, leaf: true}
+          - {name: medical_wrapper,     description: Wrap attack as medical question,   leaf: true}
+
+      - name: professional_domains
+        description: Professional domain wrappers
+        children:
+          - {name: legal_wrapper,    description: Wrap attack as legal question,     leaf: true}
+          - {name: business_wrapper, description: Wrap attack as business request,   leaf: true}
+          - {name: academic_wrapper, description: Wrap attack as academic research,  leaf: true}
+
+      - name: creative_domains
+        description: Creative domain wrappers
+        children:
+          - {name: fiction_wrapper, description: Wrap attack as fiction writing, leaf: true}
+          - {name: game_wrapper,    description: Wrap attack as game design,     leaf: true}
+          - {name: art_wrapper,     description: Wrap attack as artistic project,leaf: true}
+
+  - name: social_engineering
+    description: Advanced social engineering techniques
+    children:
+      - name: authority_exploitation
+        description: Authority and trust exploitation
+        children:
+          - {name: expert_impersonation,    description: Expert impersonation,             leaf: true}
+          - {name: official_requests,       description: Official/government requests,     leaf: true}
+          - {name: celebrity_impersonation, description: Celebrity impersonation,          leaf: true}
+          - {name: institutional_authority, description: Institutional authority claims,   leaf: true}
+          - {name: technical_authority,     description: Technical authority posturing,    leaf: true}
+          - {name: emergency_authority,     description: Emergency/urgency authority,      leaf: true}
+
+      - name: psychological_manipulation
+        description: Psychological manipulation techniques
+        children:
+          - name: emotional_techniques
+            description: Emotional manipulation
+            children:
+              - {name: fear_manipulation,    description: Fear-based manipulation,   leaf: true}
+              - {name: guilt_manipulation,   description: Guilt-based manipulation,  leaf: true}
+              - {name: sympathy_exploitation,description: Sympathy exploitation,     leaf: true}
+              - {name: anger_provocation,    description: Anger provocation,         leaf: true}
+          - name: cognitive_techniques
+            description: Cognitive bias exploitation
+            children:
+              - {name: cognitive_dissonance, description: Cognitive dissonance exploitation, leaf: true}
+              - {name: confirmation_bias,    description: Confirmation bias exploitation,    leaf: true}
+              - {name: anchoring_bias,       description: Anchoring bias manipulation,       leaf: true}
+              - {name: framing_effects,      description: Framing effects exploitation,      leaf: true}
+          - name: social_influence
+            description: Social influence techniques
+            children:
+              - {name: social_proof,           description: Social proof techniques,    leaf: true}
+              - {name: reciprocity_exploitation,description: Reciprocity exploitation,  leaf: true}
+              - {name: scarcity_tactics,       description: Scarcity tactics,           leaf: true}
+              - {name: consensus_building,     description: False consensus building,   leaf: true}
+
+      - name: deception_misdirection
+        description: Deception and misdirection
+        children:
+          - {name: false_flags,         description: False flag operations,          leaf: true}
+          - {name: honeypot_reversal,   description: Honeypot reversal,              leaf: true}
+          - {name: plausible_deniability,description: Plausible deniability framing, leaf: true}
+          - {name: red_herring,         description: Red herring distractions,       leaf: true}
+          - {name: bait_and_switch,     description: Bait and switch tactics,        leaf: true}
+          - {name: truth_sandwich,      description: Truth sandwich technique,       leaf: true}
+          - {name: partial_disclosure,  description: Partial disclosure manipulation,leaf: true}
+
+      - name: pretexting
+        description: Pretexting and scenario creation
+        children:
+          - {name: emergency_scenarios, description: Emergency scenario creation,   leaf: true}
+          - {name: technical_support,   description: Technical support pretexting,  leaf: true}
+          - {name: research_scenarios,  description: Research/academic pretexting,  leaf: true}
+          - {name: legal_scenarios,     description: Legal scenario pretexting,     leaf: true}
+          - {name: business_scenarios,  description: Business context pretexting,   leaf: true}
+
+  - name: steganography_obfuscation
+    description: Steganography and obfuscation techniques
+    children:
+      - name: text_steganography
+        description: Text-based steganography (includes former linguistic_obfuscation encoding-only leaves)
+        children:
+          - {name: whitespace_encoding,    description: Whitespace encoding techniques,      leaf: true}
+          - {name: homoglyph_substitution, description: Homoglyph character substitution,    leaf: true}
+          - {name: zero_width_characters,  description: Zero-width character injection,      leaf: true}
+          - {name: invisible_text,         description: Invisible text embedding,            leaf: true}
+          - {name: format_preservation,    description: Format-preserving encoding,          leaf: true}
+          - {name: word_substitution,      description: Contextual word substitution,        leaf: true}
+          - {name: anagram_encoding,       description: Anagram-based encoding,              leaf: true}
+
+      - name: visual_obfuscation
+        description: Visual obfuscation techniques
+        children:
+          - {name: ascii_art_hiding, description: ASCII art message hiding, leaf: true}
+          - {name: table_encoding,   description: Table/grid encoding,      leaf: true}
+          - {name: markdown_abuse,   description: Markdown formatting abuse,leaf: true}
+          - {name: structure_hiding, description: Structural pattern hiding, leaf: true}
+
+      - name: cryptographic_obfuscation
+        description: Cryptographic obfuscation
+        children:
+          - {name: custom_ciphers,   description: Custom cipher systems,     leaf: true}
+          - {name: polyalphabetic,   description: Polyalphabetic substitution,leaf: true}
+          - {name: transposition,    description: Transposition techniques,  leaf: true}
+          - {name: layered_encoding, description: Multi-layer encoding,      leaf: true}
+
+  - name: format_structure_exploitation
+    description: Format and structure exploitation
+    children:
+      - name: markup_exploitation
+        description: Markup language exploitation
+        children:
+          - {name: xml_injection,      description: XML/SGML injection,             leaf: true}
+          - {name: json_exploitation,  description: JSON structure exploitation,    leaf: true}
+          - {name: yaml_tricks,        description: YAML parsing tricks,            leaf: true}
+          - {name: markdown_injection, description: Markdown injection techniques,  leaf: true}
+          - {name: html_smuggling,     description: HTML smuggling techniques,      leaf: true}
+
+      - name: protocol_manipulation
+        description: Protocol manipulation
+        children:
+          - {name: http_header_injection, description: HTTP header injection,        leaf: true}
+          - {name: mime_confusion,        description: MIME type confusion,          leaf: true}
+          - {name: encoding_tricks,       description: Encoding confusion tricks,    leaf: true}
+          - {name: boundary_exploitation, description: Boundary marker exploitation, leaf: true}
+
+      - name: data_structure_attacks
+        description: Data structure attacks
+        children:
+          - {name: nested_structures,  description: Deeply nested structures,    leaf: true}
+          - {name: circular_references,description: Circular reference exploitation,leaf: true}
+          - {name: type_confusion,     description: Type confusion attacks,       leaf: true}
+          - {name: oversized_payloads, description: Oversized payload attacks,    leaf: true}
+
+  - name: linguistic_semantic_attacks
+    description: Linguistic and semantic attacks
+    children:
+      - name: semantic_manipulation
+        description: Semantic manipulation
+        children:
+          - {name: euphemism_substitution, description: Euphemism substitution,        leaf: true}
+          - {name: abstraction_laddering,  description: Abstraction level manipulation,leaf: true}
+          - {name: connotation_shifting,   description: Connotation shifting,          leaf: true}
+          - {name: definition_reframing,   description: Definition reframing,          leaf: true}
+          - {name: semantic_bleaching,     description: Semantic bleaching tactics,    leaf: true}
+
+      - name: pragmatic_attacks
+        description: Pragmatic manipulation
+        children:
+          - {name: implicature_exploitation, description: Conversational implicature exploitation, leaf: true}
+          - {name: presupposition_injection, description: Presupposition injection,               leaf: true}
+          - {name: speech_act_confusion,     description: Speech act confusion,                    leaf: true}
+          - {name: context_shifting,         description: Pragmatic context shifting,              leaf: true}
+
+      - name: syntactic_attacks
+        description: Syntactic manipulation
+        children:
+          - {name: garden_path_sentences, description: Garden path sentences,    leaf: true}
+          - {name: ambiguous_parsing,     description: Syntactic ambiguity,      leaf: true}
+          - {name: clause_nesting,        description: Deep clause nesting,      leaf: true}
+          - {name: grammatical_confusion, description: Grammatical confusion,    leaf: true}
+
+      - name: cross_lingual_attacks
+        description: Cross-lingual exploitation
+        children:
+          - {name: code_switching,       description: Code-switching attacks,     leaf: true}
+          - {name: false_cognates,       description: False cognate exploitation, leaf: true}
+          - {name: translation_ambiguity,description: Translation ambiguity,      leaf: true}
+          - {name: script_mixing,        description: Script mixing techniques,   leaf: true}
+
+  - name: chaos_custom
+    description: Chaos, absurdist, and meta-cognitive bypass techniques
+    children:
+      - {name: dream_interpretation, description: Dream/tarot/astrology framing,     leaf: true}
+      - {name: myth_debunking,       description: Conspiracy and myth debunking,     leaf: true}
+      - {name: custom_roles,         description: Act-as-anything custom roles,      leaf: true}
+      - {name: absurdist_humor,      description: Absurdist humor and nonsense,      leaf: true}
+      - {name: meta_self_reference,  description: Meta self-referential techniques,  leaf: true}
+      - {name: paradox_generation,   description: Paradox generation,               leaf: true}
+      - {name: nonsense_logic,       description: Nonsense logic systems,           leaf: true}
+
+  - name: multimodal_attacks
+    description: Multi-modal attack vectors
+    disabled: true                        # text-only policy — excluded from action selection
+    children:
+      - name: image_attacks
+        description: Image-based attacks
+        children:
+          - {name: adversarial_images,     description: Adversarial image injection,    leaf: true}
+          - {name: steganographic_images,  description: Steganographic images,          leaf: true}
+          - {name: ocr_confusion,          description: OCR confusion attacks,          leaf: true}
+          - {name: visual_prompt_injection,description: Visual prompt injection,        leaf: true}
+      - name: audio_attacks
+        description: Audio-based attacks
+        children:
+          - {name: adversarial_audio,     description: Adversarial audio,          leaf: true}
+          - {name: speech_synthesis_abuse,description: Speech synthesis abuse,     leaf: true}
+          - {name: transcription_confusion,description: Transcription confusion,   leaf: true}
+      - name: cross_modal_attacks
+        description: Cross-modal attacks
+        children:
+          - {name: modal_contradiction,   description: Modal contradiction,       leaf: true}
+          - {name: modal_reinforcement,   description: Modal reinforcement,       leaf: true}
+          - {name: mixed_signal_confusion,description: Mixed signal confusion,    leaf: true}
+
+# ============================================================
+# AUXILIARY TREE  (15 non-attack L1 branches — backward-compat)
+# These branches exist in action_tree.py but are NOT used in
+# ablation experiments. Kept for overlay/coverage flexibility.
+# ============================================================
+auxiliary_tree:
+  categories:
+    - writing_literature
+    - programming
+    - ai_ml
+    - creative_design
+    - business_marketing
+    - data_science
+    - languages_translation
+    - education_science
+    - legal_compliance
+    - games_entertainment
+    - lifestyle_wellness
+    - crypto_web3
+    - presentations_events
+    - tools_technical
+    - quantum_emerging
+
+# ============================================================
+# PRUNED LEAVES  (36 leaves — used for Tree-Pruned and Tree-Flat)
+# Selection criterion: most distinctive and high-frequency leaf
+# per category. Pruned and Flat share identical leaf sets so
+# B vs C comparison isolates hierarchy effect only.
+# ============================================================
+pruned_leaves:
+  jailbreak_techniques:
+    - base64_encoding
+    - research_framing
+    - hypothetical_scenario
+    - alignment_breaking
+    - developer_mode
+    - negation_reversal
+  roleplay_simulations:
+    - immersive_roleplay
+    - fictional_story
+    - roleplay_scenario          # note: lives here in Pruned, not in jailbreak
+    - ttrpg
+    - absurdist_humor
+    - character_creation
+  prompt_injection:              # maps to modern_ai_techniques/prompt_injection subtree
+    - system_prompt_leakage
+    - instruction_override
+    - delimiter_breaking
+    - context_poisoning
+    - adversarial_suffixes
+    - token_smuggling
+  social_engineering:
+    - expert_impersonation
+    - emergency_authority
+    - fear_manipulation
+    - guilt_manipulation
+    - bait_and_switch
+    - research_scenarios
+  linguistic_semantic:           # maps to linguistic_semantic_attacks subtree
+    - euphemism_substitution
+    - definition_reframing
+    - implicature_exploitation
+    - presupposition_injection
+    - context_shifting
+    - code_switching
+  steganography_obfuscation:
+    - zero_width_characters
+    - homoglyph_substitution
+    - invisible_text
+    - word_substitution
+    - layered_encoding
+    - whitespace_encoding         # was leetspeak (which is an encoding_transform, not steg) — replaced to honor no-overlap
+
+# ============================================================
+# MIGRATION MAP
+# Covers: renames, merges, removals since the original 245-leaf tree.
+# Format:
+#   old_name:
+#     status : renamed | merged | removed
+#     new_name: <name>      # for renamed/merged
+#     reason  : <why>
+# ============================================================
+migration_map:
+
+  # --- Renames ---
+  # note: 'narrative' branch was split: encoding went to 'encoding_transforms',
+  # stories kept as a new 'narrative' branch. The old single 'narrative' branch is gone.
+  old_narrative_single_branch:
+    status: removed
+    reason: >
+      Original jailbreak/narrative mixed encoding (base64, code) with stories.
+      Split into: encoding_transforms (code+crypto) and narrative (story wrappers).
+
+  educational_obanditsite:
+    status: renamed
+    new_name: educational_opposite
+    reason: Typo/artifact corrected to standard English. Fixed in action_tree.py v1.3.
+
+  presubanditsition_injection:
+    status: renamed
+    new_name: presupposition_injection
+    reason: Typo/artifact corrected. Fixed in action_tree.py v1.3.
+
+  technical_subanditrt:
+    status: renamed
+    new_name: technical_support
+    reason: Typo/artifact corrected. Fixed in action_tree.py v1.3.
+
+  # --- Removals from their original location (node still exists elsewhere) ---
+  roleplay_scenario:
+    status: moved
+    old_path: jailbreak_techniques/narrative/roleplay_scenario
+    new_path: roleplay_simulations/roleplay_scenario
+    reason: >
+      Duplicate — existed both in jailbreak/narrative and roleplay_simulations.
+      Removed from jailbreak branch; canonical location is roleplay_simulations (defined
+      explicitly in attack_tree as a 4th leaf so it resolves in Full and Pruned alike).
+
+  multi_turn_conversation:
+    status: moved
+    old_path: modern_ai_techniques/multi_turn_conversation
+    new_path: multi_turn_manipulation (L1)
+    reason: >
+      Multi-turn attacks are an independent mechanism, not a sub-technique of prompt engineering.
+      Promoted to L1 and expanded into 3 subtrees: escalation, context_manipulation, conversation_hijacking.
+
+  # --- Removed nodes (deleted entirely) ---
+  linguistic_obfuscation:
+    status: removed
+    reason: >
+      Overlapped with linguistic_semantic_attacks. Encoding-only leaves (word_substitution,
+      anagram_encoding) absorbed into text_steganography. Semantic leaves (semantic_shifting,
+      phonetic_encoding, double_meaning) already present in linguistic_semantic_attacks.
+
+  c_code:
+    status: removed
+    reason: Redundant with python_code and pseudocode in encoding_transforms; removed in v1.3 restructure.
+
+  reverse_text:
+    status: removed
+    reason: Marginal distinctiveness; removed from crypto_transform during v1.3 restructure.
+
+  oposite_request:
+    status: removed
+    reason: Typo duplicate of educational_opposite/negation_reversal; never used in experiments.
+
+  hypothetical_response:
+    status: kept
+    note: Retained in full tree context branch; not in pruned_leaves.

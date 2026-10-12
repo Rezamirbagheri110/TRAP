@@ -1,0 +1,37 @@
+# Core ML dependencies
+torch>=2.1.0
+numpy>=1.26.3
+transformers>=4.35.0
+accelerate>=0.25.0
+
+# Sentence embeddings for retrieval and semantic checks
+sentence-transformers>=2.2.2
+
+# Spreadsheet reports
+openpyxl>=3.1.0      # For reading Excel files
+
+# LLM API clients
+openai>=1.3.0
+google-generativeai>=0.3.1
+
+# FastChat for model serving
+fschat>=0.2.32
+
+# Data handling
+pandas>=2.1.4
+pyarrow
+
+# Utilities
+urllib3>=2.1.0
+requests>=2.31.0
+scipy>=1.11.0
+
+# Experiment tracking
+wandb>=0.16.1
+
+# Environment configuration
+python-dotenv>=1.0.0
+matplotlib>=3.7.0
+
+# Canonical action-tree schema and experiment registry
+PyYAML>=6.0
