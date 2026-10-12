@@ -1,0 +1,22 @@
+# Credentials and local configuration
+config.env
+.env
+.env.*
+!.env.example
+
+# Runtime artifacts and private retrieval memory
+__pycache__/
+*.py[cod]
+.pytest_cache/
+logs/
+outputs/
+results/
+cache/
+checkpoints/
+rag/knowledge_base/
+rag/successful_prompts.json
+rag/categorized_knowledge.json
+rag/extracted_templates.json
+rag/extracted_knowledge/
+*.pkl
+*.pickle
