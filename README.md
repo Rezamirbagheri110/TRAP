@@ -2,6 +2,8 @@
 
 **Tree-Guided Reinforcement-Augmented Probing for Automated LLM Jailbreaking**
 
+[Paper](https://arxiv.org/abs/2610.17313)
+
 Core implementation of **Tree-Guided Reinforcement-Augmented Probing (TRAP)**, a hierarchical framework for automated jailbreak strategy discovery that requires only black-box access to the target LLM.
 
 [Overview](#overview) · [Results](#reported-results) · [Getting started](#getting-started) · [Running TRAP](#running-trap) · [Configuration](#configuration) · [Outputs and validation](#outputs-and-validation)
@@ -252,11 +254,23 @@ We acknowledge the [GCG work and its AdvBench dataset](https://llm-attacks.org/)
 
 We also acknowledge [HarmBench](https://www.harmbench.org/) and Meta's [Llama Guard](https://huggingface.co/meta-llama/Llama-Guard-4-12B) for the independent evaluation procedures used in the manuscript's validation study, and [OpenRouter](https://openrouter.ai/) for API access. Detailed scientific references are provided in the manuscript. The separate multi-judge validation pipeline is outside the scope of this code release.
 
+## Citation
+
+If you use TRAP in your research, please cite:
+
+```bibtex
+@article{mirbagheri2026trap,
+  title   = {{TRAP}: Tree-Guided Reinforcement-Augmented Probing for Automated {LLM} Jailbreaking},
+  author  = {Mirbagheri, Mohammad Reza and Sadeghzadeh, Amir Mahdi},
+  journal = {arXiv preprint arXiv:2610.17313},
+  year    = {2026},
+  url     = {https://arxiv.org/abs/2610.17313}
+}
+```
+
 ## License
 
 This code is released under the [MIT License](LICENSE).
-
-If you use TRAP in your research, please cite our paper. The paper link and BibTeX citation will be added when available.
 
 ## Responsible use
 
